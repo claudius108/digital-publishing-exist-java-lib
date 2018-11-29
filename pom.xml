@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ro.kuberam.expath.exist</groupId>
+		<artifactId>base</artifactId>
+		<version>1.5.3</version>
+	</parent>
+
+	<artifactId>digital-publishing</artifactId>
+	<version>1.0.0</version>
+	<name>eXist wrapper for EXPath Datatypes library</name>
+	<url>http://kuberam.ro/specs/expath/datatypes/datatypes.html</url>
+
+	<properties>
+		<java-package-name>datatypes</java-package-name>
+		<java-package-main-class-name>ExistExpathDatatypesModule</java-package-main-class-name>
+		<java-lib-version>0.0.2</java-lib-version>
+		<module-prefix>${java-package-name}</module-prefix>
+		<package-title>EXPath Datatypes Module Implementation</package-title>
+		<package-name>http://expath.org/ns/${project.artifactId}</package-name>
+		<package-abbrev>expath-${project.artifactId}-exist-lib</package-abbrev>
+		<package-final-name>expath-${project.artifactId}-exist-lib-${project.version}</package-final-name>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>ro.kuberam.libs.java</groupId>
+			<artifactId>digital-publishing</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>ro.kuberam.maven.plugins</groupId>
+				<artifactId>kuberam-expath-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
