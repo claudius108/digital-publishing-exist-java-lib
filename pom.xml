@@ -22,7 +22,20 @@
 			<url>https://opensource.org/licenses/LGPL-2.1</url>
 			<distribution>repo</distribution>
 		</license>
-	</licenses>	
+	</licenses>
+
+	<organization>
+		<name>Kuberam</name>
+		<url>http://kuberam.ro</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>claudius</id>
+			<name>Claudius Teodorescu</name>
+			<email>claudius.teodorescu@gmail.com</email>
+		</developer>
+	</developers>
 
 	<properties>
 		<java-package-name>datatypes</java-package-name>
@@ -37,9 +50,13 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.exist-db</groupId>
+			<artifactId>exist-core</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>ro.kuberam.libs.java</groupId>
 			<artifactId>digital-publishing</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 	</dependencies>
 
