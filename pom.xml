@@ -12,8 +12,17 @@
 
 	<artifactId>digital-publishing</artifactId>
 	<version>1.0.0</version>
-	<name>eXist wrapper for EXPath Datatypes library</name>
-	<url>http://kuberam.ro/specs/expath/datatypes/datatypes.html</url>
+	<name>eXist-db EXPath Digital Publishing library</name>
+	<description>eXist-db wrapper for EXPath Digital Publishing Java library</description>
+	<url>http://kuberam.ro/specs/expath/digital-publishing/digital-publishing.html</url>
+	<inceptionYear>2018</inceptionYear>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License version 2.1</name>
+			<url>https://opensource.org/licenses/LGPL-2.1</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>	
 
 	<properties>
 		<java-package-name>datatypes</java-package-name>
