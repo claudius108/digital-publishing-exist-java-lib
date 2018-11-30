@@ -63,7 +63,7 @@ public class ModuleDescription extends AbstractInternalModule {
 
 	@Override
 	public String getDescription() {
-		return ExpathCryptoModule.MODULE_DESCRIPTION;
+		return ro.kuberam.libs.java.digitalPublishing.ModuleDescription.MODULE_DESCRIPTION;
 	}
 
 	@Override
