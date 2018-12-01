@@ -25,6 +25,8 @@ import java.util.Map;
 import org.exist.xquery.AbstractInternalModule;
 import org.exist.xquery.FunctionDef;
 
+import ro.kuberam.expath.exist.digitalPublishing.transform.TransformFunction;
+
 import static org.exist.xquery.FunctionDSL.functionDefs;
 
 /**
@@ -41,11 +43,8 @@ public class ModuleDescription extends AbstractInternalModule {
 	public final static String INCLUSION_DATE = "2018-11-30";
 	public final static String RELEASED_IN_VERSION = "eXist-4.4.0";
 
-	private final static FunctionDef[] functions = functionDefs(functionDefs(HashFunction.class, HashFunction.FS_HASH),
-			functionDefs(HmacFunction.class, HmacFunction.FS_HMAC),
-			functionDefs(GenerateSignatureFunction.class, GenerateSignatureFunction.FS_GENERATE_SIGNATURE),
-			functionDefs(ValidateSignatureFunction.class, ValidateSignatureFunction.FS_VALIDATE_SIGNATURE),
-			functionDefs(EncryptionFunctions.class, EncryptionFunctions.FS_ENCRYPT, EncryptionFunctions.FS_DECRYPT));
+	private final static FunctionDef[] functions = functionDefs(
+			functionDefs(TransformFunction.class, TransformFunction.FS_TRANSFORM));
 
 	public ModuleDescription(final Map<String, List<? extends Object>> parameters) throws Exception {
 		super(functions, parameters);
@@ -69,16 +68,5 @@ public class ModuleDescription extends AbstractInternalModule {
 	@Override
 	public String getReleaseVersion() {
 		return RELEASED_IN_VERSION;
-	}
-
-	public static FunctionSignature functionSignature(final String name, final String description,
-			final FunctionReturnSequenceType returnType, final FunctionParameterSequenceType... paramTypes) {
-		return FunctionDSL.functionSignature(new QName(name, NAMESPACE_URI), description, returnType, paramTypes);
-	}
-
-	public static FunctionSignature[] functionSignatures(final String name, final String description,
-			final FunctionReturnSequenceType returnType, final FunctionParameterSequenceType[][] variableParamTypes) {
-		return FunctionDSL.functionSignatures(new QName(name, NAMESPACE_URI), description, returnType,
-				variableParamTypes);
 	}
 }
