@@ -40,7 +40,7 @@
 	<properties>
 		<java-package-name>datatypes</java-package-name>
 		<java-package-main-class-name>ExistExpathDatatypesModule</java-package-main-class-name>
-		<java-lib-version>0.0.2</java-lib-version>
+		<java.lib.version>1.0.4</java.lib.version>
 		<module-prefix>${java-package-name}</module-prefix>
 		<package-title>EXPath Datatypes Module Implementation</package-title>
 		<package-name>http://expath.org/ns/${project.artifactId}</package-name>
@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>ro.kuberam.libs.java</groupId>
 			<artifactId>digital-publishing</artifactId>
-			<version>1.0.4</version>
+			<version>${java.lib.version}</version>
 		</dependency>
 	</dependencies>
 
