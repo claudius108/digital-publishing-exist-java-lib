@@ -39,7 +39,6 @@
 
 	<properties>
 		<java-package-name>datatypes</java-package-name>
-		<java-package-main-class-name>ExistExpathDatatypesModule</java-package-main-class-name>
 		<java.lib.version>1.0.4</java.lib.version>
 		<module-prefix>${java-package-name}</module-prefix>
 		<package-title>EXPath Datatypes Module Implementation</package-title>
