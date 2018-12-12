@@ -32,25 +32,37 @@ import static org.exist.xquery.FunctionDSL.optParam;
 import static org.exist.xquery.FunctionDSL.param;
 import static org.exist.xquery.FunctionDSL.returnsOptMany;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.StringReader;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.exist.Namespaces;
 import org.exist.dom.QName;
+import org.exist.dom.memtree.SAXAdapter;
+import org.exist.storage.serializers.Serializer;
 import org.exist.xquery.BasicFunction;
 import org.exist.xquery.FunctionSignature;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
-import org.exist.xquery.value.BinaryValue;
 import org.exist.xquery.value.FunctionParameterSequenceType;
 import org.exist.xquery.value.IntegerValue;
 import org.exist.xquery.value.Item;
+import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.Type;
+import org.exist.xquery.value.ValueSequence;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 import ro.kuberam.expath.exist.digitalPublishing.ModuleDescription;
 import ro.kuberam.libs.java.digitalPublishing.transform.Operation;
-import ro.kuberam.libs.java.digitalPublishing.utils.InputStreamToByteArray;
 
 public class TransformFunction extends BasicFunction {
 
@@ -83,7 +95,12 @@ public class TransformFunction extends BasicFunction {
 	@Override
 	public Sequence eval(final Sequence[] args, final Sequence contextSequence) throws XPathException {
 
-		Item inputDocumentItem = args[0].itemAt(0);
+		Sequence inputDocumentSequence = args[0];
+		if (inputDocumentSequence.isEmpty()) {
+			return Sequence.EMPTY_SEQUENCE;
+		}
+
+		Item inputDocumentItem = inputDocumentSequence.itemAt(0);
 		int inputType = inputDocumentItem.getType();
 		LOG.debug("inputType = {}", () -> inputType);
 		String inputFormat = args[1].getStringValue();
@@ -91,29 +108,66 @@ public class TransformFunction extends BasicFunction {
 		String outputFormat = args[2].getStringValue();
 		LOG.debug("outputFormat = {}", () -> outputFormat);
 
-		Sequence result = Sequence.EMPTY_SEQUENCE;
-		byte[] libResult = null;
+		Sequence result = new ValueSequence();
+		Document libResult = null;
 
 		switch (inputType) {
 		case Type.STRING:
 		case Type.ELEMENT:
 		case Type.DOCUMENT:
-			String inputDocumentStringValue = inputDocumentItem.getStringValue();
-			LOG.debug("inputDocument = {}", () -> inputDocumentStringValue);
+			Serializer serializer = context.getBroker().getSerializer();
+			NodeValue inputDocumentNode = (NodeValue) inputDocumentItem;
 
-			libResult = Operation.run(inputDocumentStringValue.getBytes(UTF_8), inputFormat, outputFormat);
+			String inputDocumentStringValue = null;
+			try {
+				String serializationResult = serializer.serialize(inputDocumentNode);
+				LOG.debug("inputDocument = {}", () -> serializationResult);
 
-		case Type.BASE64_BINARY:
-		case Type.HEX_BINARY:
-			InputStream inputDocumentBinaryValue = ((BinaryValue) inputDocumentItem).getInputStream();
+				inputDocumentStringValue = serializationResult;
+			} catch (SAXException e) {
+				// TODO Add meaningfull error
+				e.printStackTrace();
+			}
 
-			libResult = Operation.run(InputStreamToByteArray.run(inputDocumentBinaryValue), inputFormat, outputFormat);
-		}
-		
-		for (int i = 0, il = libResult.length; i < il; i++) {
-			result.add(new IntegerValue(libResult[i]));
+			String operationResult = new String(Operation.run(inputDocumentStringValue.getBytes(UTF_8), inputFormat, outputFormat),
+					UTF_8);
+			LOG.debug("operationResult = {}", operationResult);
+			
+			try {
+				result = (Sequence) stringToNode(operationResult);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			//
+			// case Type.BASE64_BINARY:
+			// case Type.HEX_BINARY:
+			// InputStream inputDocumentBinaryValue = ((BinaryValue)
+			// inputDocumentItem).getInputStream();
+			//
+			// libResult =
+			// Operation.run(InputStreamToByteArray.run(inputDocumentBinaryValue),
+			// inputFormat, outputFormat);
 		}
 
 		return result;
+	}
+
+	private Document stringToNode(String signatureString) throws Exception {
+		// process the output (signed) document from string to node()
+		try {
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			factory.setNamespaceAware(true);
+			SAXParser parser = factory.newSAXParser();
+			XMLReader xr = parser.getXMLReader();
+			SAXAdapter adapter = new SAXAdapter(context);
+			xr.setContentHandler(adapter);
+			xr.setProperty(Namespaces.SAX_LEXICAL_HANDLER, adapter);
+			xr.parse(new InputSource(new StringReader(signatureString)));
+
+			return adapter.getDocument();
+
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			throw new Exception(e.getMessage());
+		}
 	}
 }

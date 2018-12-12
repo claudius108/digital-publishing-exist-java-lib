@@ -1,6 +1,6 @@
-<package xmlns="http://expath.org/ns/pkg" name="${package-name}" abbrev="${package-abbrev}"
+<package xmlns="http://expath.org/ns/pkg" name="${package.name}" abbrev="${package-abbrev}"
 	version="${project.version}" spec="1.0">
-	<title>${package-title}</title>
+	<title>EXPath Digital Publishing Module Implementation</title>
 	<author id="cteodorescu">Claudius Teodorescu</author>
 	<website>${project.url}</website>
 	<license>GNU LGPL v2.1</license>
@@ -32,7 +32,7 @@
 	</dependencySets>
 	<components>
 		<resource>
-			<public-uri>http://expath.org/ns/crypto</public-uri>
+			<public-uri>http://expath.org/ns/digital-publishing/</public-uri>
 			<file>urn:java:class:ro.kuberam.expath.exist.digitalPublishing.ModuleDescription</file>
 		</resource>
 	</components>
