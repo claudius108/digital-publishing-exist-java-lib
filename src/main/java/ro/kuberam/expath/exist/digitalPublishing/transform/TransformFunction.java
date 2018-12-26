@@ -50,7 +50,6 @@ import org.exist.xquery.FunctionSignature;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.FunctionParameterSequenceType;
-import org.exist.xquery.value.IntegerValue;
 import org.exist.xquery.value.Item;
 import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
@@ -82,7 +81,7 @@ public class TransformFunction extends BasicFunction {
 			"The options for the current operation.");
 
 	public final static FunctionSignature FS_TRANSFORM[] = functionSignatures(FS_TRANSFORM_NAME,
-			FS_TRANSFORM_DESCRIPTION, returnsOptMany(Type.BYTE),
+			FS_TRANSFORM_DESCRIPTION, returnsOptMany(Type.NODE, "the output document as node()"),
 			arities(arity(FS_TRANSFORM_PARAM_INPUT_DOCUMENT, FS_TRANSFORM_PARAM_INPUT_FORMAT,
 					FS_TRANSFORM_PARAM_OUTPUT_FORMAT),
 					arity(FS_TRANSFORM_PARAM_INPUT_DOCUMENT, FS_TRANSFORM_PARAM_INPUT_FORMAT,
