@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>digital-publishing</artifactId>
-	<version>1.0.1</version>
+	<version>1.1.0</version>
 	
 	<name>eXist-db EXPath Digital Publishing library</name>
 	<description>eXist-db wrapper for EXPath Digital Publishing Java library</description>
